@@ -14,7 +14,7 @@ try {
 
     channel = await connection.createChannel()
 
-    console.log("✅Connected to rabbitmq");
+    console.log("✅ Connected to rabbitmq");
  } catch (error) {
     console. log("Failed to connect to rabbitma", error);
  }
