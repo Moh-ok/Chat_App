@@ -1,15 +1,15 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document, Types } from "mongoose";
 export interface IChat extends Document {
-    users: string[];
-    latestMessage: {
+    users: Types.ObjectId[];
+    latestMessage?: {
         text: string;
-        sender: string;
+        sender: Types.ObjectId;
     };
     createdAt: Date;
     updatedAt: Date;
 }
 export declare const Chat: mongoose.Model<IChat, {}, {}, {}, mongoose.Document<unknown, {}, IChat, {}, mongoose.DefaultSchemaOptions> & IChat & Required<{
-    _id: mongoose.Types.ObjectId;
+    _id: Types.ObjectId;
 }> & {
     __v: number;
 } & {

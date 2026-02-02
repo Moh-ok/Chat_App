@@ -1,11 +1,14 @@
 import type { NextFunction, Request, Response } from "express";
+import type { Types } from "mongoose";
 interface IUser extends Document {
     _id: string;
     name: string;
     email: string;
 }
 export interface AuthenticatedRequest extends Request {
-    user?: IUser | null;
+    user?: IUser & {
+        _id: Types.ObjectId;
+    };
 }
 export declare const isAuth: (req: AuthenticatedRequest, res: Response, next: NextFunction) => Promise<void>;
 export default isAuth;
