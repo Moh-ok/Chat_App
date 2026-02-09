@@ -1,7 +1,44 @@
-import { Mail } from 'lucide-react'
-import React from 'react'
+"use client";
+import { user_service } from '@/context/AppContext';
+import axios from 'axios';
+import { ArrowRight, Loader2, Mail } from 'lucide-react'
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react'
 
 const Login = () => {
+  const [email, setEmail] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLElement>
+  ): Promise<void> => {
+    e.preventDefault();
+    setLoading (true);
+
+    try {
+      const {data} = await axios.post(`${user_service}/api/v1/login`,{
+       email, 
+    });
+
+    alert(data.message)
+    router.push(`/verify?email=${email}`)
+    
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          alert(error.response.data?.message || "Invalid credentials");
+        } else {
+          alert("Cannot connect to server. Is backend running?");
+        }
+    } else {
+      alert("Unexpected error occurred");
+    }
+    }finally{
+      setLoading(false)
+    }   
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4"> 
       <div className="max-w-md w-full">
@@ -18,6 +55,46 @@ const Login = () => {
               Enter your email to continue your journey
             </p>
           </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-300 mb-2"
+              >
+                Email Address
+              </label>
+              <input type="email" id="email" className="w-full px-4 py-4
+                bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400"
+                placeholder="Enter Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)} 
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg
+              font-semibold hover:bg-blue-700 disabled:opacity-50
+              disabled:cursor-not-allowed"
+              disabled={loading}
+            >
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <Loader2 className='w-5 h-5'/>
+                  Sending otp to your mail...
+                </div>
+              ) : (
+                  <div className="flex items-center justify-center gap-2">
+                  <span>Send Verification Code</span>
+                  <ArrowRight className="w-5 h-5" />
+                </div>
+              )}
+              
+            </button>
+
+          </form>
+
         </div>
       </div>
     </div>  
