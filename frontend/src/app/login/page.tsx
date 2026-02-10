@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ArrowRight, Loader2, Mail } from 'lucide-react'
 import { redirect, useRouter } from 'next/navigation';
 import React, { useState } from 'react'
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -24,18 +25,18 @@ const Login = () => {
        email, 
     });
 
-    alert(data.message)
+    toast.success(data.message)
     router.push(`/verify?email=${email}`)
     
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          alert(error.response.data?.message || "Invalid credentials");
+          toast.error(error.response.data?.message || "Invalid credentials");
         } else {
-          alert("Cannot connect to server. Is backend running?");
+          toast.error("Cannot connect to server. Is backend running?");
         }
     } else {
-      alert("Unexpected error occurred");
+      toast.error("Unexpected error occurred");
     }
     }finally{
       setLoading(false)
