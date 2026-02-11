@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import ChatHeader from '@/components/ChatHeader';
+import ChatMessages from '@/components/ChatMessages';
 
 export interface Message {
   _id: string;
@@ -113,6 +114,11 @@ const ChatApp = () => {
         setSidebarOpen={setSiderbarOpen}
         isTyping={isTyping}
       />
+
+      <ChatMessages
+        selectedUser={selectedUser}
+        messages={messages}
+        loggedInUser={loggedInUser} />
     </div>
     </div>
   )
